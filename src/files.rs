@@ -1,13 +1,14 @@
 use crate::phf::phf_map;
 
 // this is an ugly default, what else to use?
-// pub const DEF: &'static str = "⚬";
+const DEF: &'static str = "⚬";
 
 pub static FMAP: phf::Map<&'static str, &'static str> = phf_map! {
     "cfg"        => "",
     "conf"       => "",
     "css"        => "",
     "db"         => "",
+    "dir"        => "",
     "Dockerfile" => "",
     "duck"       => "",
     "fire"       => "",
@@ -17,6 +18,7 @@ pub static FMAP: phf::Map<&'static str, &'static str> = phf_map! {
     "java"       => "",
     "jpeg"       => "",
     "jpg"        => "",
+    "js"         => "",
     "lock"       => "",
     "mp3"        => "",
     "nix"        => "",
@@ -26,11 +28,15 @@ pub static FMAP: phf::Map<&'static str, &'static str> = phf_map! {
     "rb"         => "",
     "rs"         => "",
     "sh"         => "",
-    "txt"        => "",
+    "toml"       => "",
+    "txt"        => "",
     "symbol"     => " "
 };
 
-#[allow(dead_code, unused_variables)]
-pub fn fmtf(fname: String) {
-
+pub fn fmtf(fname: String, ext: &str) -> String {
+    if let Some(icon) = FMAP.get(ext) {
+        return format!("{}  {}", icon, fname);
+    } else {
+        return format!("{}  {}", DEF, fname);
+    }
 }

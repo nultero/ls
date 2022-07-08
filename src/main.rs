@@ -22,7 +22,7 @@ fn main() {
     }//                                      so the panic is fine. if I run this somewhere that's on me
     
     let wsz = rx::termios::tcgetwinsize(file_desc)
-                        .expect("troubel grabbing winsize from tty file handle");
+                        .expect("trouble grabbing winsize from tty file handle");
 
     let width: u16 = wsz.ws_col;
     let height: u16 = wsz.ws_row;
@@ -30,7 +30,7 @@ fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
 
     if args.len() == 0 {
-        pprint::pretty_print_cwd(width, height);
+        pprint::pretty_print_cwd(width, height, false);
         return;
     }
 
