@@ -1,6 +1,8 @@
+use std::process::exit;
+
 use crate::phf::phf_map;
 
-// this is an ugly default, what else to use?
+// TODO this is an ugly default, what else to use?
 const DEF: &'static str = "⚬";
 
 pub static FMAP: phf::Map<&'static str, &'static str> = phf_map! {
@@ -13,13 +15,14 @@ pub static FMAP: phf::Map<&'static str, &'static str> = phf_map! {
     "duck"       => "",
     "fire"       => "",
     "git"        => "",
-    "go"         => "",
+    "go"         => "",
     "html"       => "",
     "java"       => "",
     "jpeg"       => "",
     "jpg"        => "",
     "js"         => "",
     "lock"       => "",
+    "md"         => "",
     "mp3"        => "",
     "nix"        => "",
     "pdf"        => "",
@@ -39,4 +42,15 @@ pub fn fmtf(fname: String, ext: &str) -> String {
     } else {
         return format!("{}  {}", DEF, fname);
     }
+}
+
+/// ### Debug fn
+/// Used to triple-check that my fonts all draw the unicode
+/// chars like I expect. Basically has to be a manual
+/// test because of the visuals for now.
+pub fn dbg_dump_icons() {
+    for (k, v) in FMAP.entries() {
+        println!("{}: {}", k, v);
+    }
+    exit(0);
 }

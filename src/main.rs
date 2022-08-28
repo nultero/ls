@@ -1,46 +1,46 @@
 extern crate phf;
 extern crate rustix;
 
+mod args;
 mod files;
 mod pprint;
+mod state;
 
-use files::FMAP;
+use args::parse_args;
 use rustix as rx;
+use state::default_state;
 
 fn main() {
+    let mut stt = default_state();
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    parse_args(&args, &mut stt);
 
     // slightly restated winsize code example from
     // * github.com/eminence/terminal-size *
-    // I am too lazy to add another dep
+    // I did not want to add another dep
     let stdout = rx::io::raw_stdout();
     let file_desc: rx::fd::BorrowedFd = unsafe {
         rx::fd::BorrowedFd::borrow_raw(stdout)
     };
     
     if !rx::termios::isatty(file_desc) {
-        panic!("not running with a tty"); // eh. this bin is only for me, 
-    }//                                      so the panic is fine. if I run this somewhere that's on me
-    
-    let wsz = rx::termios::tcgetwinsize(file_desc)
-                        .expect("trouble grabbing winsize from tty file handle");
-
-    let width: u16 = wsz.ws_col;
-    let height: u16 = wsz.ws_row;
-    
-    let args: Vec<String> = std::env::args().skip(1).collect();
-
-    if args.len() == 0 {
-        pprint::pretty_print_cwd(width, height, false);
-        return;
+        stt.is_tty = false;
+        stt.porcelain = true;
     }
 
-    for arg in args {
-
-        if arg == "--allicons" {
-            for (k, v) in FMAP.entries() {
-                println!("{}: {}", k, v);
-            }
+    if stt.is_tty {
+        let wsz = rx::termios::tcgetwinsize(file_desc)
+                            .expect("trouble grabbing winsize from tty file handle");
+    
+        let width: u16 = wsz.ws_col;
+        let height: u16 = wsz.ws_row;
+    
+        if !stt.has_search {
+            pprint::pretty_print_cwd(width, height, stt);
             return;
         }
+    } else {
+        todo!();
     }
+    
 }
