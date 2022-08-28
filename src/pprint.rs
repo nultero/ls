@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::fs::read_dir;
 
 /// High-level print delegator.
-pub fn pretty_print_cwd(w: u16, h: u16, stt: State) {
+pub fn pretty_print_cwd(w: u16, stt: State) {
     let dir = read_dir(".").expect("problem reading current dir");
 
     let mut files: Vec<String> = vec![];
@@ -66,11 +66,11 @@ pub fn pretty_print_cwd(w: u16, h: u16, stt: State) {
     }
 
     mx_len += 3; // pad for icons
-    calc_and_print(file_names, w, h, mx_len);
+    calc_and_print(file_names, w, mx_len);
 }
 
 #[allow(unused_variables)]
-fn calc_and_print(file_names: Vec<String>, w: u16, h: u16, mx_len: usize) {
+fn calc_and_print(file_names: Vec<String>, w: u16, mx_len: usize) {
 
     let wd = w as usize;
 

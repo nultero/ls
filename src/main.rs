@@ -33,10 +33,9 @@ fn main() {
                             .expect("trouble grabbing winsize from tty file handle");
     
         let width: u16 = wsz.ws_col;
-        let height: u16 = wsz.ws_row;
     
         if !stt.has_search {
-            pprint::pretty_print_cwd(width, height, stt);
+            pprint::pretty_print_cwd(width, stt);
             return;
         }
     } else {
